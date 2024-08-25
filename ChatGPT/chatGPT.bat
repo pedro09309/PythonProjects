@@ -1,0 +1,7 @@
+@ECHO OFF
+SETLOCAL
+
+python .\chatGPT.py
+
+:END
+ENDLOCAL
