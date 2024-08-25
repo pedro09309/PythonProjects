@@ -1,0 +1,83 @@
+-------------------------------------------------------------
+Problem: Sort elements of an array
+-------------------------------------------------------------
+Example: 
+-  input: [1, 23, 12,  9, 30,  2, 50]
+- output: [1,  2,  9, 12, 23, 30, 50]
+
+-------------------------------------------------------------
+Merge sort
+-------------------------------------------------------------
+Useful link: https://www.geeksforgeeks.org/merge-sort/
+
+	Analysis:
+	-  Time complexity: O(nlog(n))
+	- Space complexity: O(n)
+	
+	C code:
+	
+	// [1, 3, 0, 2, 5, 6, 7]
+    //  l        m        r
+	
+	void sortArray(int arr[], int l, int r)
+	{
+	  if(l < r)
+	  {
+	    int m = l + (r - l)/2;
+		
+		sortArray(arr, l, m);     // Left subarray
+		sortArray(arr, m + 1, r); // Right subarray
+		
+		mergeArrays(arr, l, m, r);
+	  }	  
+	}
+	
+	void mergeArrays(int arr[], int l, int m, int r)
+	{
+	  int leftArr[m + 1];
+	  int rightArr[r - m];
+	  
+	  // Copy the array into local arrays
+	  for (int i = 0; i <= m; i++
+	  {
+	    leftArr[i] = arr[l + i];
+	  }
+	  
+	  for (int j = 0; j <= (r - m); j++)
+	  {
+	    rightArr[j] = arr[(m + 1) + j];
+	  }
+	  
+	  
+	  // Sort merge the local arrays into the array
+	  int left_pos = 0;
+	  int righ_pos = 0;
+		
+	  for (int k = 0; k <= r; k++)
+	  {
+	    if(leftArr[left_pos] < rightArr[righ_pos])
+		{
+		  arr[k] = leftArr[left_pos];
+		  left_pos++;
+		}
+		else
+		{
+		  arr[k] = rightArr[righ_pos];
+		  righ_pos++;
+		}
+	  }											  
+	}
+
+
+    // Analysis and tests cases
+	//               [1, 3, 8, 2, 5, 6, .... 7]
+	//              [1, 3, 2, 8]      [5, 6, 7]
+	//            [1, 3]    [2, 8]   [5, 6]    [7]
+    //           [1]  [3]  [8]  [2] [5] [6] 
+	
+	Time complexity  -> O(nlog(n))
+    Space complexity -> O(n)
+
+	// leftArr  = [1, 3, 2, 8];    left_pos = 0 -> 1 -> 2 -> 2... 4
+    // rightArr = [5, 6, 7];       righ_pos = 0 -> 0 -> 0 -> 1... 3
+	// response = [1, 3, 5, 6, 7, 8]      k = 0 -> 1 -> 2 -> 3... 6

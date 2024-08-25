@@ -1,0 +1,115 @@
+-------------------------------------------------------------
+Problem: 2D traveler
+-------------------------------------------------------------
+Example: How many ways there are from x to y moving only to 
+         the right and down.
+
+				-------------
+		      	| x |   |   |
+				-------------
+				|   |   |   |
+				-------------
+				|   |   | y |
+				-------------   
+	
+		gridTraveler(1,1) -> 1
+		gridTraveler(2,2) -> 2
+		gridTraveler(3,3) -> 6
+		
+-------------------------------------------------------------
+Dynamic Programming - Recursive
+-------------------------------------------------------------
+Useful links: https://www.youtube.com/watch?v=oBt53YbR9Kk
+
+-------------------------------------------------------------
+	Solution:  
+-------------------------------------------------------------
+gridTraveler(row, col) -> g(2,2)
+
+case: g(2,2) row = 2
+			 col = 2
+						---------
+						| a |   |
+						---------
+						|   | b |
+						---------
+				
+					     g(2,2)  
+				 g(1,2)         g(2,1)
+              x      g(1,1)  g(1,1)    x
+			  
+						   2  
+				   1              1
+              0        1      1       0
+			  
+case: g(2,3) row = 2
+			 col = 3
+						------------
+						| a |   |   |
+						------------
+						|   |   | b |
+						------------
+										 
+						   g(2,3)
+			g(1,3)  				     g(2,2)  
+		g(0,3)   g(1,2)			 g(1,2)         g(2,1)
+			  g(0,2)  g(1,1)  g(0,2) g(1,1)  g(1,1)  g(2,0)
+							  
+							  
+							3
+				1  				           2 
+		0           1			    1              1
+				0	   1        0      1        1     0
+									
+
+    int gridTraveler_GetValue(int row, int col)
+	{
+	  if((row == 0) || (col == 0)) { return 0; }
+	  if((row == 1) && (col == 1)) { return 1; }
+	  
+	  return (gridTraveler_GetValue(row - 1, col) + gridTraveler_GetValue(row, col - 1));	  
+	}
+	
+	- Time complexity: 2*2*2...row times -> 2^r
+					   2*2*2...col times -> 2^c
+					   
+					   2^r * 2^c -> O(2^r+c) -> That is huuge!
+					   
+	- Space complexity: store row * col data
+	                    O(r + c) -> That is acceptable.
+					   
+	
+	
+	// Adding memoization...
+	#define HASHMAP_SIZE (50)
+	
+	typedef struct
+	{
+	  char key[8]; // "g(x, y)" -> where: x -> row, y -> col
+	  int value;   // value of g(x, y)
+	} hashmap_t;
+	
+	hashmap_t hashmap[HASHMAP_SIZE];
+	int current_pos = 0;	
+	
+	int gridTraveler_GetValue(int row, int col)
+	{
+	  char key[];
+	  sprintf(key, "%s %s %s %s", "g(", 0x30 + row, 0x30 + col,")"); // "key = g(x, y)"
+	  
+	  if(hashmap_existKey(key) == true) { return hashmap_getValue(key); }
+	  if((row == 0) || (col == 0))      { return 0;                     }
+	  if((row == 1) && (col == 1))      { return 1;                     }
+	  
+	  int new_value = (gridTraveler_GetValue(row - 1, col) + gridTraveler_GetValue(row, col - 1));	
+	  
+	  hashmap_addNew(key, new_value);
+	  
+	  return new_value;	  
+	}
+	
+	// TODO: To be implemented.
+	bool hashmap_existKey(char key[]);
+	int  hashmap_getValue(char key[]);
+	void hashmap_addNew(char key[], int new_value);
+	

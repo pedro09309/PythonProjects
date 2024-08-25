@@ -18,12 +18,10 @@ def get_database():
 
 def run_ml_model(data_x, data_y):
     ml_model = LinearSVC()
-    training_x, test_x, training_y, test_y = train_test_split(data_x, data_y) # training rate is 25% by default
+    training_x, test_x, training_y, test_y = train_test_split(data_x, data_y)
     ml_model.fit(training_x, training_y)
     print("\n")
     print("TRAINING AND TEST ACCURACY:")
-    # print("       Data base (75 %): ", training_x)
-    # print("  Classification (75 %): ", training_y)
     print("\n")
     print("       Data test (25 %): ", test_x)
     print(" Expected result (25 %): ", test_y)

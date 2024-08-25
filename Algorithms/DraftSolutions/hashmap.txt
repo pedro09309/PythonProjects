@@ -1,0 +1,45 @@
+------------------------------------------------------------------
+Hashmap implement - C
+------------------------------------------------------------------
+typedef struct {
+    char key[16];
+    int value;
+} item;
+
+item* hashmap_search(item* items, size_t size, const char* key) { // It can be a linear, binary or any other search method.
+    for (size_t i=0; i<size; i++) {
+        if (strcmp(items[i].key, key) == 0) {
+            return &items[i]; // key was found!
+        }
+    }
+    return NULL; // key not found!
+}
+
+int main(void) {
+    item items[] = {
+        {"foo", 10}, {"bar", 42}, {"bazz", 36}, {"buzz", 7},
+        {"bob", 11}, {"jane", 100}, {"x", 200}};
+    size_t num_items = sizeof(items) / sizeof(item);
+
+    item* found = hashmap_search(items, num_items, "bob");
+    if (!found) {
+        return 1;
+    }
+    printf("hashmap_search: value of 'bob' is %d\n", found->value);
+    return 0;
+}
+
+
+
+
+-----------------------------------
+typedef struct {
+    char key[16];
+    int value;
+} hashmap_t;
+
+hashmap_t hashmap[HASHMAP_SIZE];
+
+hashmap_SearchKey(char* key);
+hashmap_AddKey(char* key);
+hashmap_RemoveKey(char* key);

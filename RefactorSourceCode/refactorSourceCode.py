@@ -6,7 +6,6 @@ import subprocess
 from dotenv import load_dotenv, find_dotenv
 
 # ChatGPT credentials
-# openai_version = "gpt-3.5-turbo"
 openai_version = "gpt-4-turbo"
 _ = load_dotenv(find_dotenv())
 openai.api_key = os.environ['OPENAI_API_KEY']
@@ -38,14 +37,6 @@ rules += "{delimiter} RULE 21 - Function´s arguments not used by the code must 
 rules += "{delimiter} RULE 22 - Functions must contain a short comment explanation.\n"
 rules += "{delimiter} RULE 23 - Boolean variables must be hbl_bool type with HBL_FALSE or HBL_TRUE values.\n"
 rules += "{delimiter} RULE 24 - Do not add or change any library.\n"
-
-
-# system_message = f'''You are an expert embedded software engineer! \
-#                      Your main goal is to refactor source code in C.
-#                      There are restricts rules delimited by {delimiter} character \
-#                      you must follow: {rules} \
-#                      When you finish it, you must go throught your response \
-#                      and check if it meet all the given rules. '''
 
 system_message = f'''You are a expert to refactor source code in C.
                      Therefore, you must follow some rules delimited by {delimiter} characters: {rules} \
@@ -104,19 +95,10 @@ def get_user_input():
         return user_input
 
 def run_c_code_refactor():
-    # print("How to use it? ")
-    # print("   1 - Enter the C source code to be refactored; ")
-    # print("   2 - Type GO to start the process; \n")
-    # print("...\n")
     print(">>> enter your C code, then type GO to start: \n\n")
     
     # Get original source code
     source_code = get_user_input()
-
-    # # Remove unused variable
-    # unused_vars = remove_unused_variables(source_code)
-    # print(unused_vars)
-
     # Run AI process
     while(1):
         print("\n\n")
@@ -133,32 +115,8 @@ def run_c_code_refactor():
 if __name__ == "__main__":
 
     print("\n----------------- AI Code Refactor -----------------\n")
-    # print("Refactoring general rules: \n", rules)
     run_c_code_refactor()
     print("\n-----------------------------------------------------\n")
     
     while(1):
          pass # keep terminal open in order to keep the refactor code on the screen.
-
-
-
-
-# static void OnEventChangedEvent(uint8_t event, uint8_t id)
-# {
-#   // Essa rotina atualiza novos limites sempre que necessario.
-   
-#    uint32_t test = 0;
-#    hbl_bool isTrue;
-
-#   if (HBL_TRUE == IsSignedValueInRange(event.data, 1, MAX_VALUE))
-#   {
-#     plugin.event = (uint8_t)event.data; // Copia o dado para o evento.
-#     if (GetState(&plugin.state_machien ) == STATE_A) 
-#     {
-#             PublishNewLimits()  ; // Publish all the new limits
-#     }
-#   }
-  
-#   return False;
-# }
-

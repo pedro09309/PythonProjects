@@ -36,20 +36,7 @@ def isSquareOfZeroes (matrix, r1, c1, r2, c2):
     return True
 
 # TEST
-# Input
-matrix = [
-    [1,1,1,0,1,0],
-    [0,0,0,0,0,1],
-    [0,1,1,1,0,1],
-    [0,0,0,1,0,1],
-    [0,1,1,1,0,1],
-    [0,0,0,0,0,1],
-]
-
-print("Result: ", squareOfZeroes(matrix))
-
-# Output -> True
-# matrix = [
+# input = [
 #     [ , , , , , ],
 #     [0,0,0,0,0, ],
 #     [0, , , ,0, ],
@@ -57,4 +44,11 @@ print("Result: ", squareOfZeroes(matrix))
 #     [0, , , ,0, ],
 #     [0,0,0,0,0, ],
 # ]
+input = [[1,1,1,0,1,0],[0,0,0,0,0,1],[0,1,1,1,0,1],[0,0,0,1,0,1],[0,1,1,1,0,1],[0,0,0,0,0,1]]
+output = squareOfZeroes(input)
 
+print(f'Input: ')
+for i in range(len(input)):
+    print(f'{input[i]}')
+
+print(f'Output: {output}')

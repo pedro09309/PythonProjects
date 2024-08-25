@@ -1,0 +1,118 @@
+-------------------------------------------------------------
+Problem: Two sum problem
+-------------------------------------------------------------
+Example: Is that possible to get the target by adding only
+		  two numbers?
+		  
+-  input: nums = [1, 2, 4, 4], target = 8
+- output: true (4, 4)
+
+-  input: nums = [1, 2, 3, 9], target = 8
+- output: false
+
+		
+
+-------------------------------------------------------------
+Useful links: https://www.youtube.com/watch?v=XKu_SEDAykw&t=1119s
+
+-------------------------------------------------------------
+	Solution:  Looking for the complement + hashmap
+-------------------------------------------------------------
+
+  // Brute force solution
+	bool twoSum_HasThePar(int arr[], int target)
+	{
+	int arr_size = sizeof(arr)/sizeof(int);
+
+	if(arr_size < 2) { return false; }
+
+	for(int i = 0; i < arr_size; i++)
+	{
+	  int complement = target - arr[i];
+	  
+	  for(int j = 0; j < arr_size; j++)
+	  {
+		if(arr[j] == complement) { return true; }
+	  }
+	}
+
+	return false;
+	}
+  
+  
+  case: [1, 2, 3, 9], target = 8
+		
+		1 - Get the complement of i-th numbers;
+		2 - Search for the complement in the array:
+			- If it exists, it has the par to reach the target!
+			- If does not, go to next element;
+		
+	-  Time complexity: O(n²)
+	- Space complexity: O(1)	
+	
+	
+  // Optimal solution -> adding a hashmap
+	
+	#define HASHMAP_SIZE (50)
+	
+	typedef struct
+	{
+	  int key;     // Target complement of the i-th element
+	  int value;   // Value of the i-th element
+	} hashmap_t;
+
+	hashmap_t hashmap[HASHMAP_SIZE];
+	int current_pos = 0;	
+	
+	bool twoSum_HasThePar(int arr[], int target)
+	{
+	  int arr_size = sizeof(arr)/sizeof(int);
+	     
+	  if(arr_size < 2){ return false; }
+	     
+	  for(int i = 0; i < arr_size; i++)
+	  {
+	    int complement = target - arr[i];
+	    
+	    if(hashmap_HasTheKey(complement) == true){ return true; }
+		
+		hashmap_Add(complement, arr[i]);
+	  }
+	     
+	  return false;
+	}
+	
+	bool hashmap_HasTheKey(int key)
+	{
+	  for(int i = 0; i < HASHMAP_SIZE; i++)
+	  {
+	    if(hashmap[i] == key){ return true; }
+	  }
+	  
+	  return false;
+	}
+	
+	void hashmap_Add(int key, int value)
+	{
+	  if(current_pos < HASHMAP_SIZE)
+	  { 
+	    hashmap[current_pos].key   = key;
+		hashmap[current_pos].value = value;
+		current_pos++;
+	  }
+	}
+	
+	
+	-------------------------------
+	arr = [1, 2, 5, 3], target = 8
+	
+	hashmap table
+	index   key   value
+	  0      7      1
+	  1      6      2
+	  2      3      5
+	  3      -      -
+
+
+	-  Time complexity: O(n²) -> O(n*HASHMAP_SIZE) -> O(n)
+	- Space complexity: O(1)                       -> O(n)

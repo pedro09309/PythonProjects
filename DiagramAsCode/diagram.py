@@ -1,18 +1,3 @@
-# ----------------------- Example 1 -----------------------:
-# from diagrams import Diagram
-# from diagrams.aws.compute import EC2
-# from diagrams.aws.database import RDS
-# from diagrams.aws.network import ELB
-
-# with Diagram("Grouped Workers", show=False, direction="TB"):
-#     ELB("lb") >> [EC2("worker1"),
-#                   EC2("worker2"),
-#                   EC2("worker3"),
-#                   EC2("worker4"),
-#                   EC2("worker5")] >> RDS("events")
-# ----------------------- Example 1 -----------------------:
-
-# ----------------------- Example 2 -----------------------:
 from diagrams import Cluster, Diagram
 from diagrams.onprem.analytics import Spark
 from diagrams.onprem.compute import Server
@@ -49,4 +34,3 @@ with Diagram("Advanced Web Service with On-Premise", show=False):
     aggregator >> Kafka("stream") >> Spark("analytics")
 
     ingress >> grpcsvc >> aggregator
-# ----------------------- Example 2 -----------------------:

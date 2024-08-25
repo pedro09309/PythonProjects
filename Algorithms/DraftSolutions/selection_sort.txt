@@ -1,0 +1,41 @@
+-------------------------------------------------------------
+Problem: Sort elements of an array
+-------------------------------------------------------------
+Example: 
+-  input: [1, 23, 12,  9, 30,  2, 50]
+- output: [1,  2,  9, 12, 23, 30, 50]
+
+-------------------------------------------------------------
+Selection sort
+-------------------------------------------------------------
+Useful link: https://www.geeksforgeeks.org/selection-sort/
+
+	Analysis:
+	-  Time complexity: O(n²)
+	- Space complexity: O(1)
+	
+	C code:
+	
+	void selectionSort(int arr[], int n)
+	{
+	  for(int i = 0; i < n; i++)
+	  {
+		int smallest = i; // Position of the smallest number right to i-th pos
+		
+		for(int j = i + 1; j < n; j++)
+		{
+		  if (arr[j] < arr[smallest])
+		  {
+			 smallest = j; // New smallest found
+		  }
+		}
+		
+		// Swap the i-th to the smallest, if needed.
+		if (smallest != i)
+		{
+		  int aux_var   = arr[i];
+		  arr[i]        = arr[smallest];
+		  arr[smallest] = aux_var;
+		}
+	  }
+	}

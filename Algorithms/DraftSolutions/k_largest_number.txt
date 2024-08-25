@@ -1,0 +1,70 @@
+-------------------------------------------------------------
+Problem: Find the k largest/smallest element in an array
+-------------------------------------------------------------
+Example: 
+-  input: [1, 23, 12, 9, 30, 2, 50], k = 3
+- output: [50, 30, 23]
+
+-------------------------------------------------------------
+Solution: selection sort + array chop
+-------------------------------------------------------------
+	Analysis:
+	-  Time complexity: O(nlog(n))
+	- Space complexity: O(1)
+	
+    Python code:
+
+	class Solution:
+
+		def kLargest(self,arr, n, k):
+			
+			# Sort in ascending order (selection sort)
+			for i in range(n):
+				
+				lowest_pos = i
+				
+				for j in range(i + 1, n):
+					if(arr[j] < arr[lowest_pos]):
+						lowest_pos = j
+			   
+				arr[i], arr[lowest_pos] = arr[lowest_pos], arr[i]
+		   
+			# Chop the array to get the k largest elements     
+			new_arr = [0] * k
+			for i in range(k):
+			   new_arr[i] = arr[(n - 1) - i]
+			
+			return new_arr
+
+-------------------------------------------------------------
+Solution: heap data using a priority queue
+-------------------------------------------------------------
+	Analysis:
+	-  Time complexity: O(nlog(k))
+	- Space complexity: O(k)
+	
+    Python code:
+	
+	def kLargest(v, N, K):
+ 
+    # Implementation using
+    # a Priority Queue
+    pq = []
+    heapq.heapify(pq)
+ 
+    for i in range(N):
+ 
+        # Insert elements into
+        # the priority queue
+        heapq.heappush(pq, v[i])
+ 
+        # If size of the priority
+        # queue exceeds k
+        if (len(pq) > K):
+            heapq.heappop(pq)
+ 
+    # Print the k largest element
+    while(len(pq) != 0):
+        print(heapq.heappop(pq), end=' ')
+    print()
+	

@@ -1,0 +1,90 @@
+-------------------------------------------------------------
+Problem: Fibonacci number
+-------------------------------------------------------------
+Example: 
+		f(0) ->       = 0
+		f(1) ->       = 1
+		f(2) -> 0 + 1 = 1
+		f(3) -> 1 + 1 = 2
+		f(4) -> 1 + 2 = 3
+		f(5) -> 2 + 3 = 5
+		f(6) -> 3 + 5 = 8
+		  .
+		  .
+		  .
+		f(19) -> ...  = 4181
+		
+-------------------------------------------------------------
+Dynamic Programming - Recursive
+-------------------------------------------------------------
+Useful links: https://www.youtube.com/watch?v=oBt53YbR9Kk
+			  https://en.wikipedia.org/wiki/Fibonacci_sequence
+
+-------------------------------------------------------------
+	The most basic solution:
+-------------------------------------------------------------
+	int getFibonnaci(int n)
+	{
+	  if(n <= 2){ return 1;                                      }
+	  else      { return (getFibonnaci(n-1) + getFibonnaci(n-2));}
+	}
+
+	-  Time complexity: O(2^n) -> that is a huuge time complexity.
+	- Space complexity: O(n)   -> recurvise functions are added and removed from the stack!
+	
+-------------------------------------------------------------
+	Basic solution + memoization:
+-------------------------------------------------------------
+    #define HASHMAP_SIZE (50)
+	
+	typedef struct
+	{
+	  int key;    // Fibonacci input  ->   n
+	  int value;  // Fibonacci output -> f(n)
+	} hashmap_t;
+	
+	hashmap_t hashmap[HASHMAP_SIZE] = {(-1, -1)};
+	int current_pos = 0;	
+	
+	int getFibonnaci(int n)
+	{
+	  if(hashmap[n].key != -1) { return hashmap[n]; }
+	  if(n <= 2)               { return 1;          }
+	  
+	  int value = getFibonnaci(n-1) + getFibonnaci(n-2);
+	  
+	  hashmap_add(n, value); 
+	  
+	  return new_value;  
+	}
+	
+	// Add key and value to the hashmap table
+	void hashmap_add(int key, int value)
+	{
+	  if (current_pos < HASHMAP_SIZE)
+	  { 
+	    hashmap[current_pos].key   = current_pos;
+		hashmap[current_pos].value = value;
+		current_pos++;
+	  }
+	}	
+	
+	--------------------------
+	// Examples: 
+	// f(5)
+					       f(5)						   
+			      f(4)                   f(3)				
+	      f(3)          f(2)        f(2)   f(1)		 
+     f(2)   f(1)    f(1)   f(1)  f(1)	 
+   f(1)
+   
+   					      5						   
+			      3             2				
+	        2        1          		 
+        1     1 	 
+     1
+	 
+	 2*2*2*2....2 -> O(2^n) ... with memoization: O(n)
+	 
+	-  Time complexity: O(2^n) -> O(n)
+	- Space complexity: O(n)   -> O(n)			 
