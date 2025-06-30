@@ -3,15 +3,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.tree import DecisionTreeRegressor
 from sklearn.svm import SVR
 from sklearn.neighbors import KNeighborsRegressor
-from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 
 def load_real_temperature_data():
-    df = pd.read_csv('./MachineLearning/data/measurements.csv')
+    # df = pd.read_csv('./MachineLearning/data/measurements_2days.csv')
+    # df = pd.read_csv('./MachineLearning/data/measurements_14days.csv')
+    df = pd.read_csv('./MachineLearning/data/measurements_56days.csv')
 
     df['publishedAt'] = pd.to_datetime(df['publishedAt'], errors='coerce')
     df_sorted = df.sort_values(by='publishedAt')
@@ -31,33 +30,23 @@ def load_real_temperature_data():
     timestamps = timestamps[:min_length]
 
     return T_internal.reshape(-1, 1), T_ambient, timestamps #reshape -> scikit-learn requires 2D arrays for X
-
+        
 def run_temperature_regression():
     X, y, timestamps = load_real_temperature_data()
-
     time_steps = np.arange(len(X))
 
     X_train, X_test, y_train, y_test, t_train, t_test = train_test_split(
         X, y, time_steps, test_size=0.25, random_state=42
     )
 
-    # Result: Test MSE: 1.1404 | Test RMSE: 1.0679 °C | Test R²: 0.4885
+    # Result: Error (RMSE): 1.00 °C | Accuracy(R²): 60.62 %
     # model = LinearRegression()
 
-    # Result: Test MSE: 0.9905 | Test RMSE: 0.9952 °C | Test R²: 0.5558
-    # model = RandomForestRegressor(n_estimators=100, random_state=42)
-
-    # Result: Test MSE: 1.1656 | Test RMSE: 1.0796 °C | Test R²: 0.4772
-    # model = DecisionTreeRegressor()
-
-    # Result: Test MSE:  0.8389 | Test RMSE: 0.9159 °C | Test R²: 0.6237
+    # Result: Error (RMSE): 0.94 °C | Accuracy(R²): 65.28 %
     model = SVR()
 
-    # Result: Test MSE: 0.9231 | Test RMSE: 0.9608 °C | Test R²: 0.5860
+    # Result: Error (RMSE): 1.00 °C | Accuracy(R²): 60.85 %
     # model = KNeighborsRegressor(n_neighbors=5)
-
-    # Result: Test MSE: 1.1407 | Test RMSE: 1.0680 °C | Test R²: 0.4884
-    # model = MLPRegressor(hidden_layer_sizes=(64, 64), max_iter=1000)
 
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
@@ -66,21 +55,16 @@ def run_temperature_regression():
     r2 = r2_score(y_test, y_pred)
 
     print("\n--- Ambient Temperature Estimation Model (Real Data) ---\n")
-    # MSE = Mean Squared Error
-    # It measures the average of the squared differences between predicted and actual values
-    # Lower is better — 0 means perfect predictions.
-    print(f"Test MSE: {mse:.4f}")
-
     # RMSE = Root Mean Squared Error
     # It's the square root of the MSE, giving the error in the same units as the target variable (in this case, degrees Celsius)
     # Easier to interpret because it tells you how far off your predictions are on average in °C
-    print(f"Test RMSE: {np.sqrt(mse):.4f} °C")
+    print(f"Error (RMSE): {np.sqrt(mse):.2f} °C")
 
     # R² = Coefficient of Determination
     # Tells how well the model explains the variance in the data.
     # Range: 0 to 1 (or negative if the model is worse than simply predicting the mean)
     # 1.0 = perfect fit, 0.0 = no better than mean, < 0 = worse than mean prediction
-    print(f"Test R²: {r2:.4f}")
+    print(f"Accuracy (R²): {r2 * 100:.2f} %")
 
     # Plotting
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8))
@@ -97,12 +81,12 @@ def run_temperature_regression():
     ax1.set_title("Time Series: Internal vs Ambient Temperature")
     ax1.set_ylabel("Temperature (°C)")
     ax1.set_xlabel("Time (hours)")
-    ax1.set_ylim(0, max(X_train.max(), y_train.max()) + 2)
+    ax1.set_ylim(10, 40)
     ax1.legend()
     ax1.grid(True)
 
-    # Set x-axis ticks every 12 hours
-    tick_interval_hours = 12
+    # Set x-axis ticks every 168 hours
+    tick_interval_hours = 168
     max_hours = time_axis_hours[-1]
     xticks = np.arange(0, max_hours + tick_interval_hours, tick_interval_hours)
     ax1.set_xticks(xticks)
@@ -114,6 +98,7 @@ def run_temperature_regression():
     ax2.set_title("Test Data vs Model Predictions")
     ax2.set_xlabel("T_internal (°C)")
     ax2.set_ylabel("T_ambient (°C)")
+    ax2.set_ylim(10, 40)
     ax2.legend()
     ax2.grid(True)
 
